@@ -1,4 +1,4 @@
-name: CI of jvrc_description
+name: CI of mc_int_obj_description
 
 on:
   push:
@@ -13,11 +13,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-20.04]
+        os: [ubuntu-22.04, ubuntu-24.04]
         variant: [ROS, Standalone]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
       if: ${{ matrix.variant == 'Standalone' }}
       with:
         submodules: recursive
@@ -26,9 +26,5 @@ jobs:
       uses: jrl-umi3218/github-actions/build-cmake-project@master
       with:
         options: -DDISABLE_ROS=ON
-    - name: Build with catkin
-      if: ${{ matrix.os == 'ubuntu-20.04' && matrix.variant == 'ROS' }}
-      uses: jrl-umi3218/github-actions/build-catkin-project@master
     - name: Build with colcon
-      if: ${{ matrix.os == 'ubuntu-22.04' && matrix.variant == 'ROS' }}
       uses: jrl-umi3218/github-actions/build-colcon-project@master
